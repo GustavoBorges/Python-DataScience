@@ -1,0 +1,142 @@
+import pandas as pd
+import numpy as np
+
+black_friday = pd.read_csv("black_friday.csv")
+
+black_friday.head(10)
+
+#Calculando percentual
+def calcPercentual(total_registro, total_registro_notnull):
+    result = total_registro - total_registro_notnull
+    result = ((result * 100)/total_registro)/100
+    return result
+
+def calcNomarlizacao(valor):
+    result = (valor - valor.min())/(valor.max() - valor.min())
+    return result
+
+def calcNormalizacaoPadronizada(valor):
+    result = (valor - valor.mean())/valor.std()
+    return result
+
+# Resultado Questão 1: 
+def resultado_1():
+    resultado_1 = black_friday.shape
+    return resultado_1
+
+# Resultado Questão 2
+def resultado_2():
+    resultado_2 = black_friday[(black_friday['Age'] == "26-35") & (black_friday['Gender'] == "F")].groupby(['Gender'])['Gender'].count().sum()
+    return resultado_2
+
+# Resultado Questão 3
+def resultado_3():    
+    resultado_3 = black_friday['User_ID'].nunique()
+    return resultado_3
+
+# Resultado Questão 4
+def resultado_4():
+    resultado_4 = black_friday.dtypes.nunique()
+    return resultado_4
+
+# Resultado Questão 5
+def resultado_5():
+    total_registro_notnull = black_friday.dropna()['User_ID'].count() #total registros sem null
+    total_registro = black_friday['User_ID'].count()
+
+    resultado_5 = calcPercentual(total_registro, total_registro_notnull)
+    return resultado_5
+
+# Resultado Questão 6
+def resultado_6():
+    resultado_6 = black_friday.isnull().sum().max()
+    return resultado_6
+
+# Resultado Questão 7
+def resultado_7():
+    resultado_7 = black_friday['Product_Category_3'].mode().sum()
+    return resultado_7
+
+# Resultado Questão 8
+def resultado_8():
+    valor = black_friday['Purchase']
+    resultado_8 = calcNomarlizacao(valor)
+    resultado_8 = resultado_8.mean()
+    return resultado_8
+
+
+# Resultado Questão 9
+
+def resultado_9():
+    valor = black_friday['Purchase']
+    resultado_9 = calcNormalizacaoPadronizada(valor)
+    resultado_9 = resultado_9.where((resultado_9 >= -1) & (resultado_9 <= 1))
+    resultado_9 = resultado_9.count()
+    return resultado_9
+
+# Resultado Questão 10
+def resultado_10():
+    resultado_10 = black_friday.loc[0:537577, ['Product_Category_2', 'Product_Category_3']]
+    resultado_10 = resultado_10.query('Product_Category_2.isnull() and Product_Category_3.notnull()', engine='python')
+    resultado_10 = resultado_10.empty
+    return resultado_10
+
+def q1():
+    # Retorne aqui o resultado da questão 1. R: (537577, 12)
+        result = tuple(resultado_1())
+        return result
+pass
+
+def q2():
+    # Retorne aqui o resultado da questão 2. R: 49348
+         result = int(resultado_2())
+         return result
+pass
+
+def q3():
+    # Retorne aqui o resultado da questão 3. R: 5891
+        result = int(resultado_3())
+        return result
+pass
+
+def q4():
+    # Retorne aqui o resultado da questão 4. R: 3
+        result = int(resultado_4()) 
+        return result
+pass
+
+def q5():
+    # Retorne aqui o resultado da questão 5. R: 0.6944102891306734
+         result = float(resultado_5())
+         return result
+pass
+
+def q6():
+    # Retorne aqui o resultado da questão 6. R: 373299
+        result = int(resultado_6())
+        return result
+pass
+
+def q7():
+    # Retorne aqui o resultado da questão 7. R: 16.0
+        result = float(resultado_7())
+        return result
+pass
+
+def q8():
+    # Retorne aqui o resultado da questão 8. R: 0.38479390362696736
+        result = float(resultado_8())
+        return result
+pass
+
+def q9():
+    # Retorne aqui o resultado da questão 9. R: 348631
+         result = int(resultado_9())
+         return result
+pass
+
+def q10():
+    # Retorne aqui o resultado da questão 10. R: True
+         result = bool(resultado_10()) 
+         return result
+pass
